@@ -10,7 +10,7 @@ import { InspectionApiService } from 'src/app/inspection-api.service';
 export class ShowInspectionComponent implements OnInit {
 
   inspectionList$!:Observable<any[]>;
-  inspectionTypeList$!:Observable<any[]>;
+  inspectionTypesList$!:Observable<any[]>;
   inspectionTypeList:any=[];
 
   //Map to display data associate with foreing keys
@@ -21,6 +21,19 @@ export class ShowInspectionComponent implements OnInit {
 
   ngOnInit(): void {
     this.inspectionList$ = this.service.getInspectionList();
+    this.inspectionTypesList$ = this.service.getInspectionTypesList();
+    this.refreshInspectionTypesMap();
+  }
+
+  refreshInspectionTypesMap(){
+    this.service.getInspectionTypesList().subscribe(data =>{
+      this.inspectionTypeList = data;
+
+      for(let i = 0; i < data.length; i++)
+      {
+        this.inspectionTypesMap.set(this.inspectionTypeList[i].id, this.inspectionTypeList[i].inspectionName);
+      }
+    })
   }
 
 }
